@@ -3,7 +3,7 @@
 #include "Pieza.h"
 
 Pieza::Pieza(u_int8_t id, 
-        u_int8_t color, 
+        char color, 
         int ancho,
         int alto,
         int x,
@@ -15,12 +15,18 @@ Pieza::Pieza(u_int8_t id,
     this->alto = alto;
     this->x = x;
     this->y = y;
-    this->geometria = geometria;
+    /*
+    copiar la geometría para que se aloje dentro de la pieza
+    */
+    this->geometria = new u_int8_t[ancho*alto];
+    for(int i= 0; i<ancho*alto; i++){
+        this->geometria[i] = geometria[i];
+    }
 }
 
 // destructor para borrar el puntero de geometria
 Pieza::~Pieza() {
-    free(geometria);
+    delete[] this->geometria;
 }
 
 // metodo usado para debug
@@ -34,9 +40,9 @@ void Pieza::imprimirPieza() {
     for (int i = 0; i < ancho * alto; i+=ancho) {
         for(int j = 0; j < ancho; j++) {
             if(geometria[i + j] == 1) {
-                std::cout << (int)color;
+                std::cout << color;
             } else {
-                std::cout << " ";
+                std::cout << "-";
             }
         }
         std::cout << std::endl;

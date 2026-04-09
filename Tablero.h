@@ -12,11 +12,14 @@ class Tablero{
     int ancho;
     int alto;
     char** cuadricula;
-    Pieza* piezas;
+    Pieza** piezas;
+    int cantidadPiezas;
 
     Tablero(int ancho, 
         int alto, 
-        Pieza* piezas);
+        Pieza** piezas,
+        int cantidadPiezas);
+    ~Tablero();
 
     void agregarPieza(Pieza pieza);
     //void agregarPiezas(Pieza* piezas);

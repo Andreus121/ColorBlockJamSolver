@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 
 /*
@@ -8,7 +9,7 @@ class Pieza {
     public:
     //atributos
     u_int8_t id;
-    u_int8_t color;
+    char color;
     int ancho;
     int alto;
     int x;
@@ -17,7 +18,7 @@ class Pieza {
 
     // constructor
     Pieza(u_int8_t id, 
-        u_int8_t color, 
+        char color, 
         int ancho,
         int alto,
         int x,
@@ -26,9 +27,6 @@ class Pieza {
     
     // destructor
     ~Pieza();
-
-    // debug
-    void imprimirPieza();
-
+    void imprimirPieza(); // debug
 
 };
