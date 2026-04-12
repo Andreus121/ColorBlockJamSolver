@@ -36,5 +36,7 @@ class Salida{
         int li,
         int lf,
         int pasos);
-
+    
+    // función que actualiza el tamaño de la salida dependiendo de su dirección
+    void actualizarSalida();
 };

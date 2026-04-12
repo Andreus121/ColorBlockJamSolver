@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "Pieza.h"
+#include "Salida.h"
 
 /*
 Clase tablero que contendrá la información del espacio de juego
@@ -14,11 +15,15 @@ class Tablero{
     char** cuadricula;
     Pieza** piezas;
     int cantidadPiezas;
+    Salida** salidas;
+    int cantidadSalidas;
 
     Tablero(int ancho, 
         int alto, 
         Pieza** piezas,
-        int cantidadPiezas);
+        int cantidadPiezas,
+        Salida** salidas,
+        int cantidadSalidas);
     ~Tablero();
     void imprimirTablero();
     
@@ -29,7 +34,7 @@ class Tablero{
     void agregarPieza(Pieza pieza);
     void agregarPiezas();
 
-    //void agregarSalida();
+    void agregarSalida();
     //void agregarSalidas();
 
     /*
