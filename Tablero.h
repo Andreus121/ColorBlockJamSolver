@@ -1,41 +1,28 @@
+#pragma once
 #include <iostream>
 #include <string>
-#include "Pieza.h"
+#include "StaticData.h"
+#include "Bloque.h"
 #include "Salida.h"
+#include "Compuerta.h"
 
-/*
-Clase tablero que contendrá la información del espacio de juego
-las piezas, compuertas, salidas y paredes
-*/
-class Tablero{
+class Tablero {
     public:
     //atributos
-    int ancho;
-    int alto;
-    char** cuadricula;
-    Pieza** piezas;
-    int cantidadPiezas;
-    Salida** salidas;
-    int cantidadSalidas;
-
-    Tablero(int ancho, 
-        int alto);
-    ~Tablero();
-    void imprimirTablero();
+    StaticData* staticData; // datos del tablero, bloques, salidas y compuertas
+    int cantidadBloques;
+    Bloque** bloques;  // arreglo de punteros a bloques (solo los que quedan en juego en este turno)
+    Salida** salidas;  // arreglo de punteros a salidas
+    Compuerta** compuertas; // arreglo de compuertas
+    int contadorMovimientos; // contador de movimientos realizados en el turno actual (inicia en 0)
     
-    //añadir las paredes al tablero
-    void agregarParedes(char** paredes);
 
-    //añadir las piezas al juego
-    void agregarPieza(Pieza pieza);
-    void agregarPiezas(Pieza** piezas, int cantidadPiezas   );
+    //constructor
+    Tablero(StaticData* staticData,
+        Bloque** bloques,
+        Salida** salidas,
+        Compuerta** compuertas);
 
-    void agregarSalida(Salida salida);
-    void agregarSalidas(Salida** salidas, int cantidadSalidas);
+    //métodos
 
-    /*
-    void agregarCompuerta();
-    void agregarCompuertas();
-    */
 };
-

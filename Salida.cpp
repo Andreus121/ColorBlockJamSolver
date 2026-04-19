@@ -1,57 +1,43 @@
-#include <iostream>
+#include <string>
 #include "Salida.h"
 
-// Constructor para piezas que no varían su tamaño
-Salida::Salida(char color,
-        int x,
-        int y,
-        char orentacion,
-        int la){
-    this->color = color;
-    this->x = x;
-    this->y = y;
-    this->orentacion = orentacion;
-    this->li = la;
-    this->lf = la;
+Salida::Salida(int id,
+        int la,
+        StaticData* staticData){
+    this->id = id;
     this->la = la;
-    this->pasos = 0;
-    this->direccion = '0';
-}
-// Constructor para piezas que varían su tamaño
-Salida::Salida(char color,
-        int x,
-        int y,
-        char orentacion,
-         int li,
-         int lf,
-         int pasos){
-    this->color = color;
-    this->x = x;
-    this->y = y;
-    this->orentacion = orentacion;
-    this->li = li;
-    this->lf = lf;
-    this->la = li;
-    this->pasos = pasos;
-    this->direccion = '0';
+    this->direccion = 0;
+    this->contadorpasos = 1;
+    this->staticData = staticData;
 }
 
-/*
-actualiza el tamaño de la salida dependiendo de su dirección
-y cabia la dirección si es necesario
-*/
-void Salida::actualizarSalida(){
-    if(this->direccion == '0'){// si le toca crecer
-        this->la += this->pasos;
-        if(this->la >= this->lf){// si llega a su tamaño maximo
-            this->la = this->lf;
-            this->direccion = '1';
+//el cambio de tamaño es de rebote, si llega al largo maximo cambia de direccion para volver hasta largo inicial
+//li: largo inicial, lf: largo final, pasos: cada cuantos pasos se cambia el tamaño de la salida
+void Salida::actualizarSalida(int li, int lf, int pasos){
+    // si la salida es de tamaño fijo, no se actualiza
+    if(pasos == 0){
+        return;
+    }
+
+    // si la salida llega a su largo máximo, cambia la dirección a achicar
+    if(this->la == lf){
+        this->direccion = 1;
+    }
+    // si es igual a su largo inicial (minimo), cambia la dirección a crecer
+    else if(this->la == li){
+        this->direccion = 0;
+    }
+    
+    // actualiza el tamaño de la salida
+    // segun corresponda si crece o achica
+    if(this->contadorpasos == pasos){
+        this->contadorpasos = 1;
+        if(this->direccion == 0){
+            this->la += 1;
+        } else {
+            this->la -= 1;
         }
-    }else{// si le toca achicar
-        this->la -= this->pasos;
-        if(this->la <= this->li){// si llega a su tamaño minimo
-            this->la = this->li;
-            this->direccion = '0';
-        }
+    }else{ // si no debe cambiar el tamaño aumenta cuantos pasos lleva con el mismo tamaño
+        this->contadorpasos++;
     }
 }

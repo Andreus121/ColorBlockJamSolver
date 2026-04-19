@@ -1,42 +1,25 @@
+#pragma once
 #include <iostream>
 #include <string>
-
+#include "StaticData.h"
 /*
-Clase que contendrá la información de cada salida de las piezas
-en el tablero, como su tamaño inicial y final, 
-cuantos espacios varía su tamaño (pasos), etc
+Si una pieza toca una salida del mismo color, la pieza desaparece si el tamaño coincide
+además que las salidas pueden variar su tamaño con el tiempo, manteniendo su tamaño durante 0, 1 o más pasos
 */
 class Salida{
     public:
-    char color;
-    // coordendas de la salida en el tablero
-    int x;
-    int y;
-    // indica si la salida es vertical u horizontal
-    char orentacion;
-    int li;// tamaño minimo e inicial de la salida
-    int lf;// tamaño maximo de la salida
-    int la;;// tamaño actual de la salida
-    int pasos;// cuantos espacios va a variar su tamaño entre li y lf
-    // siempre empieza en 0 (indica que le toca crecer) 1 ind
+    //atributos
+    int id;
+    int la;// tamaño actual de la salida
+    int contadorpasos;// cuantos espacios va a variar su tamaño entre li y lf
+    // la direccion siempre empieza en 0 (indica que le toca crecer) y cambia a 1 (indica que le toca achicar)
     char direccion;// indica si a la salida le toca crecer o achicar
+    StaticData* staticData;
 
-    //constructor de una pieza que no varía su tamaño
-    Salida(char color,
-        int x,
-        int y,
-        char orentacion,
-        int la);
-    
-    //constructor de una pieza que varía su tamaño
-    Salida(char color,
-        int x,
-        int y,
-        char orentacion,
-        int li,
-        int lf,
-        int pasos);
-    
-    // función que actualiza el tamaño de la salida dependiendo de su dirección
-    void actualizarSalida();
+    //constructor
+    Salida(int id,
+        int la,
+        StaticData* staticData);
+
+    void actualizarSalida(int li, int lf, int pasos);
 };
