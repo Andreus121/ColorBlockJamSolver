@@ -1,4 +1,5 @@
-#include <string>
+#pragma once
+#include <cstdint>
 
 class StaticData{
     public:
@@ -14,7 +15,7 @@ class StaticData{
     char* coloresBloques;
     int* altoBloques;
     int* anchoBloques;
-    u_int8_t** geometriaBloques;
+    uint8_t** geometriaBloques;
 
     //datos de las salidas
     //el id de cada salida será el mismo que el indice de su respectivo dato
@@ -30,7 +31,10 @@ class StaticData{
     //datos de las compuertas
     //el id de cada compuerta será el mismo que el indice de su respectivo dato
     int cantidadCompuertas;
-    char* coloresCompuertas;
+    int* xCompuertas;
+    int* yCompuertas;
+    char* colorICompuertas;
+    char* colorFCompuertas;
     int* pasosCompuertas;
 
     //constructor

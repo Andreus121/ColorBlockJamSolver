@@ -1,5 +1,3 @@
-#include <iostream>
-#include <string>
 #include "StaticData.h"
 
 StaticData::StaticData(){
@@ -27,6 +25,9 @@ StaticData::StaticData(){
 
     //datos de las compuertas
     this->cantidadCompuertas = 0;
-    this->coloresCompuertas = nullptr;
+    this->xCompuertas = nullptr;
+    this->yCompuertas = nullptr;
+    this->colorICompuertas = nullptr;
+    this->colorFCompuertas = nullptr;
     this->pasosCompuertas = nullptr;
 }

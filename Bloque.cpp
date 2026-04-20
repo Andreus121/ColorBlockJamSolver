@@ -1,7 +1,6 @@
-#include <string>
 #include "Bloque.h"
 
-Bloque::Bloque(u_int8_t id, 
+Bloque::Bloque(uint8_t id, 
         int x,
         int y,
         StaticData* staticData){

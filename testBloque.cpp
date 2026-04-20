@@ -8,10 +8,7 @@ int main() {
 
     // Imprimir los datos del bloque
     std::cout << "Bloque: " << (int)bloque1->id << ", Posición: (" << bloque1->x << ", " << bloque1->y << ")" << std::endl;
-
-    delete bloque1;
-    return 0;
-
+    
     delete bloque1;
     return 0;
 }
