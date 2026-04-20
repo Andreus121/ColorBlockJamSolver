@@ -1,4 +1,4 @@
-all: testBloque testSalida testCompuerta testTablero testMovimiento
+all: testBloque testSalida testCompuerta testTablero testMovimiento testParser
 
 StaticData.o: StaticData.h StaticData.cpp
 	g++ -c StaticData.cpp
@@ -28,5 +28,10 @@ Tablero.o: Tablero.h Tablero.cpp StaticData.o Salida.o Compuerta.o Bloque.o Movi
 testTablero: testTablero.cpp Tablero.o
 	g++ Bloque.o Salida.o Compuerta.o StaticData.o Tablero.o Movimiento.o testTablero.cpp -o testTablero
 
+Parser.o: Parser.h Parser.cpp StaticData.o Salida.o Compuerta.o Bloque.o Movimiento.o Tablero.o
+	g++ -c Parser.cpp
+testParser: testParser.cpp Parser.o StaticData.o Salida.o Compuerta.o Bloque.o Movimiento.o Tablero.o
+	g++ Bloque.o Salida.o Compuerta.o StaticData.o Parser.o Movimiento.o Tablero.o testParser.cpp -o testParser
+
 clean:
-	rm -f *.o testBloque testSalida testCompuerta testTablero testMovimiento
+	rm -f *.o testBloque testSalida testCompuerta testTablero testMovimiento testParser
