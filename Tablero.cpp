@@ -556,3 +556,154 @@ Tablero** Tablero::generarVecinos(int& cantidadVecinos){
     cantidadVecinos = n;
     return vecinos;
 }
+
+//Los tableros son iguales si tienen los mismos bloques vivos en las mismas
+//posiciones, las mismas compuertas con los mismos colores actuales, y las mismas
+//salidas con los mismos largos actuales.
+bool Tablero::esIgual(Tablero* otro){
+    // cantidad de bloques
+    if(this->cantidadBloques != otro->cantidadBloques){
+        return false;
+    }
+
+    //Comparar bloques mediante id ya que indice puede ser distinto
+    for(int i = 0; i < this->cantidadBloques; i++){
+        Bloque* b1 = this->bloques[i];
+        //buscar el bloque del mismo id en el otro tablero
+        bool encontrado = false;
+        for(int j = 0; j < otro->cantidadBloques; j++){
+            Bloque* b2 = otro->bloques[j];
+            //verificar si tienen el mismo id
+            if(b1->id == b2->id){
+                //verificar si tienen las mismas coordenadas
+                if(b1->x != b2->x || b1->y != b2->y){
+                    return false;
+                }
+                //encontró el bloque, puede seguir con el siguiente
+                encontrado = true;
+                break;
+            }
+        }
+        //si no encuentra el bloque, los tableros no son iguales
+        if(!encontrado){
+            return false;
+        }
+    }
+
+    //compuertas: mismo orden en la lista de cada tablero
+    int nc = this->staticData->cantidadCompuertas;
+    for(int i = 0; i < nc; i++){
+        //verificar el color y pasos de cada uno
+        if(this->compuertas[i]->coloractual != otro->compuertas[i]->coloractual){
+            return false;
+        }
+        if(this->compuertas[i]->contadorpasos != otro->compuertas[i]->contadorpasos){
+            return false;
+        }
+    }
+
+    //salidas:mismo orden en la lista de cada tablero
+    int ns = this->staticData->cantidadSalidas;
+    for(int i = 0; i < ns; i++){
+        //comprobar largo actual, pasos y direccion
+        if(this->salidas[i]->la != otro->salidas[i]->la){
+            return false;
+        }
+        if(this->salidas[i]->contadorpasos != otro->salidas[i]->contadorpasos){
+            return false;
+        }
+        if(this->salidas[i]->direccion != otro->salidas[i]->direccion){
+            return false;
+        }
+    }
+    //verificó todo, son iguales
+    return true;
+}
+
+//Hash simple: combina posiciones de bloques, colores de compuertas, largos de salidas.
+//Se multiplica por un primo grande en cada iteracion para dispersar.
+unsigned long Tablero::hash(){
+    unsigned long h = 0;
+    const unsigned long PRIMO = 1000003UL; //primo para mezclar bits
+
+    //incorporar posiciones de bloques (ordenados por id para consistencia)
+    //si los bloques están en orden de id, podemos iterar directo; si no,
+    //para mayor robustez iteramos por cantidadBloquesTotal y buscamos cada id
+    int nb = this->staticData->cantidadBloques;
+    for(int id = 0; id < nb; id++){
+        //buscar si el bloque 'id' sigue vivo
+        int x = -1, y = -1; //-1 indica que salió
+        for(int i = 0; i < this->cantidadBloques; i++){
+            if((int)this->bloques[i]->id == id){
+                x = this->bloques[i]->x;
+                y = this->bloques[i]->y;
+                break;
+            }
+        }
+        //sumar resultados al hash
+        h = h * PRIMO + (unsigned long)(x + 1000);
+        h = h * PRIMO + (unsigned long)(y + 1000);
+    }
+
+    //sumar los colores de las cmpuertas y sus pasos
+    for(int i = 0; i < this->staticData->cantidadCompuertas; i++){
+        h = h * PRIMO + (unsigned long)this->compuertas[i]->coloractual;
+        h = h * PRIMO + (unsigned long)this->compuertas[i]->contadorpasos;
+    }
+
+    //sumar largo de las salidas y sus pasos
+    for(int i = 0; i < this->staticData->cantidadSalidas; i++){
+        h = h * PRIMO + (unsigned long)this->salidas[i]->la;
+        h = h * PRIMO + (unsigned long)this->salidas[i]->contadorpasos;
+    }
+
+    return h;
+}
+
+//Heurística: suma de distancias Manhattan de cada bloque vivo a la salida
+//mas cercana de su mismo color. Esto subestima la distancia real cuando
+//hay paredes/compuertas en el camino, pero es admisible: A* encuentra la
+//solucion optima si existe.
+int Tablero::heuristica(){
+    int total = 0;
+    for(int b = 0; b < this->cantidadBloques; b++){
+        //obtener el puntero del bloque y sus datos
+        Bloque* bloque = this->bloques[b];
+        int id = bloque->id;
+        char color = this->staticData->coloresBloques[id];
+
+        //buscar la salida del mismo color más cercana
+        int mejorDist = -1;
+        for(int s = 0; s < this->staticData->cantidadSalidas; s++){
+            //verificar el mismo color
+            if(this->staticData->coloresSalidas[s] != color){
+                continue;
+            }
+
+            //usamos como referencia el centro del bloque y la posición de la salida
+            int bx = bloque->x;
+            int by = bloque->y;
+            int sx = this->staticData->xSalidas[s];
+            int sy = this->staticData->ySalidas[s];
+
+            //calcular distancia mediante distancia Manhattan: |dx| + |dy|
+            int dx = bx - sx; if(dx < 0) dx = -dx;
+            int dy = by - sy; if(dy < 0) dy = -dy;
+            int dist = dx + dy;
+
+            //guardar solo la menor distancia a una salida del mismo color
+            if(mejorDist == -1 || dist < mejorDist){
+                mejorDist = dist;
+            }
+        }
+
+        //si no hay salida del color, el tablero no tiene solución
+        //por lo que se devuelve una heurestica alta
+        //para procesar la decision en otra funcion
+        if(mejorDist == -1){
+            mejorDist = 1000;
+        }
+        total += mejorDist;
+    }
+    return total;
+}

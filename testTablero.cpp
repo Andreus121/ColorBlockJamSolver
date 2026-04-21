@@ -102,6 +102,34 @@ int main(){
     for(int i = 0; i < n; i++) delete vecinos[i];
     delete[] vecinos;
 
+    std::cout << "\n--- Prueba 7: esIgual, hash, heuristica ---" << std::endl;
+    //crear un clon del estado inicial del clon (mismo estado, distinto objeto)
+    Tablero* gemelo = clon->clonar();
+    std::cout << "clon vs gemelo (deben ser iguales):" << std::endl;
+    std::cout << "  esIgual? " << (clon->esIgual(gemelo) ? "Si" : "No") << std::endl;
+    std::cout << "  hash clon:   " << clon->hash() << std::endl;
+    std::cout << "  hash gemelo: " << gemelo->hash() << std::endl;
+
+    //mover el gemelo y comparar
+    gemelo->moverBloque(0, 'L');
+    std::cout << "\ntras mover gemelo L (deberian ser distintos):" << std::endl;
+    std::cout << "  esIgual? " << (clon->esIgual(gemelo) ? "Si" : "No") << std::endl;
+    std::cout << "  hash clon:   " << clon->hash() << std::endl;
+    std::cout << "  hash gemelo: " << gemelo->hash() << std::endl;
+
+    //volver el gemelo a la posicion original con R: deberian volver a ser iguales
+    gemelo->moverBloque(0, 'R');
+    std::cout << "\ntras devolver gemelo R (mismo estado espacial, pero tiempo avanzo):" << std::endl;
+    std::cout << "  esIgual? " << (clon->esIgual(gemelo) ? "Si" : "No")
+              << " (ojo: si hay compuertas/salidas dinámicas pueden diferir)" << std::endl;
+    std::cout << "  hash clon:   " << clon->hash() << std::endl;
+    std::cout << "  hash gemelo: " << gemelo->hash() << std::endl;
+
+    std::cout << "\nheuristica del clon (bloque en (4,4), salida en x=7): "
+              << clon->heuristica() << std::endl;
+    //esperado: |4-7| + |4-4| = 3
+
+    delete gemelo;
     delete clon;
     delete tablero;
  

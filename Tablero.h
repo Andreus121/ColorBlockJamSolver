@@ -92,8 +92,24 @@ class Tablero {
     //genera todos los tableros vecinos: por cada bloque vivo y por cada
     //direccion (U/D/L/R), si el movimiento es legal, clona el tablero,
     //aplica el movimiento, y agrega el clon al arreglo retornado.
-    //Cada vecino tiene padre=this y movimientoOrigen seteado.
+    //Cada vecino tiene padre=this y movimientoOrigen colocado.
     //El llamador es el dueño de los vecinos y debe liberarlos con delete.
     //cantidadVecinos retorna por referencia cuántos hijos válidos hubo.
     Tablero** generarVecinos(int& cantidadVecinos);
+    
+    //compara si el tablero actual representa el mismo ESTADO que otro tablero:
+    //mismos bloques vivos con mismas posiciones, mismos colores de compuerta,
+    //mismos largos de salida. Ignora padre, movimientoOrigen y contadorMovimientos.
+    bool esIgual(Tablero* otro);
+ 
+    //produce un numero entero que resume el estado del tablero.
+    //Estados iguales tendrán el mismo hash; estados distintos normalmente
+    //tendrán hashes distintos (puede haber colisiones, que se resuelven con esIgual).
+    //Usado como indice en la tabla hash del ClosedSet.
+    unsigned long hash();
+ 
+    //estima la distancia a la solucion: suma de distancias Manhattan
+    //de cada bloque vivo a la salida más cercana de su mismo color.
+    //Es una heuristica admisible: nunca sobreestima la distancia real.
+    int heuristica();
 };
