@@ -1,9 +1,9 @@
 #include "HashSet.h"
 
 //constructor
-HashSet::HashSet(int numBucketsInicial){
-    if(numBucketsInicial < 1) numBucketsInicial = 1;
-    this->capacidad = numBucketsInicial;
+HashSet::HashSet(int capacidadInicial){
+    if(capacidadInicial < 1) capacidadInicial = 1;
+    this->capacidad = capacidadInicial;
     this->cantidad = 0;
     this->lista = new Nodo*[this->capacidad];
     for(int i = 0; i < this->capacidad; i++) this->lista[i] = nullptr;
@@ -73,7 +73,7 @@ void HashSet::rehashear(){
     Nodo** nuevos = new Nodo*[nuevoLargo];
     for(int i = 0; i < nuevoLargo; i++) nuevos[i] = nullptr;
 
-    //mover todos los nodos existentes a los nuevos lista
+    //mover todos los nodos existentes al nuevo hash
     //reutilizamos los nodos (no creamos nuevos) para evitar allocs
     for(int i = 0; i < this->capacidad; i++){
         Nodo* actual = this->lista[i];

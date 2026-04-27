@@ -1,4 +1,4 @@
-all: testBloque testSalida testCompuerta testTablero testMovimiento testParser testMinHeap testHashSet testCamino testAestrella
+all: testBloque testSalida testCompuerta testTablero testMovimiento testParser testMinHeap testHashSet testCamino testAestrella main
 
 StaticData.o: StaticData.h StaticData.cpp
 	g++ -c StaticData.cpp
@@ -52,6 +52,9 @@ Aestrella.o: Aestrella.h Aestrella.cpp Tablero.o Camino.o MinHeap.o HashSet.o
 	g++ -c Aestrella.cpp
 testAestrella: testAestrella.cpp Aestrella.o Camino.o MinHeap.o HashSet.o Parser.o Tablero.o Bloque.o Salida.o Compuerta.o StaticData.o Movimiento.o
 	g++ Aestrella.o Camino.o MinHeap.o HashSet.o Parser.o Tablero.o Bloque.o Salida.o Compuerta.o StaticData.o Movimiento.o testAestrella.cpp -o testAestrella
+
+main: main.cpp Aestrella.o Camino.o MinHeap.o HashSet.o Parser.o Tablero.o Bloque.o Salida.o Compuerta.o StaticData.o Movimiento.o
+	g++ Aestrella.o Camino.o MinHeap.o HashSet.o Parser.o Tablero.o Bloque.o Salida.o Compuerta.o StaticData.o Movimiento.o main.cpp -o main
 
 clean:
 	rm -f *.o testBloque testSalida testCompuerta testTablero testMovimiento testParser testMinHeap testHashSet testCamino testAestrella

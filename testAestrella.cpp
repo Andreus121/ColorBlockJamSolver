@@ -69,10 +69,10 @@ int main(int argc, char** argv){
     if(argc >= 2){
         probar(argv[1]);
     } else {
-        probar("Ejemplo1.txt");
-        probar("Ejemplo2.txt");
-        probar("Ejemplo3.txt");
-        //probar("facil1.txt");
+        //probar("Ejemplo1.txt");
+        //probar("facil2.txt");
+        //probar("Ejemplo3.txt");
+        //probar("Ejemplo4.txt");
     }
     return 0;
 }
