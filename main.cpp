@@ -157,7 +157,7 @@ int main(){
                 }
 
                 std::cout << "\nResolviendo..." << std::endl;
-                AStar* astar = new AStar(tableroInicial);
+                Aestrella* astar = new Aestrella(tableroInicial);
                 Camino* sol = astar->resolver();
                 ultimoTiempoMs = astar->tiempoMs();
                 int explorados = astar->estadosExplorados;

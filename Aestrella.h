@@ -5,7 +5,7 @@
 #include "HashSet.h"
 
 /*
-AStar: algoritmo de busqueda informada para resolver Color Block Jam
+Aestrella: algoritmo de busqueda informada para resolver Color Block Jam
 Usa MinHeap como OpenSet, cola de prioridad O(log n) con los estados por explorar
 HashSet como ClosedSet, detecta estados repetidos ya visitados en O(1) promedio
 
@@ -27,21 +27,21 @@ El algoritmo:
 3) Si OpenSet se vacio sin encontrar solucion: no hay solucion
 
 Uso:
-  AStar* a = new AStar(tableroInicial);
+  Aestrella* a = new Aestrella(tableroInicial);
   Camino* sol = a->resolver();// nullptr si no hay solucion
   int ms = a->tiempoMs();
   delete a;
   delete sol;
 */
-class AStar {
+class Aestrella {
     public:
     Tablero* inicial;//tablero inicial (NO es dueño, solo referencia)
     int ultimoTiempo;//tiempo que tomo la ultima llamada a resolver()
     int estadosExplorados;//para estadisticas
     int estadosGenerados;//para estadisticas
 
-    AStar(Tablero* tableroInicial);//constructor, recibe el puntero del tablero inicial
-    ~AStar();//destructor
+    Aestrella(Tablero* tableroInicial);//constructor, recibe el puntero del tablero inicial
+    ~Aestrella();//destructor
 
     //Busca una solucion, retorna nullptr si no la hay
     //El Camino retornado es dueño de sus movimientos; llamador debe hacer delete

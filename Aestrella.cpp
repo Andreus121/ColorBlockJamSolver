@@ -2,23 +2,23 @@
 #include <ctime>//libreria para medir el tiempo de CPU
 #include "Aestrella.h"
 
-AStar::AStar(Tablero* tableroInicial){
+Aestrella::Aestrella(Tablero* tableroInicial){
     this->inicial = tableroInicial;
     this->ultimoTiempo = 0;
     this->estadosExplorados = 0;
     this->estadosGenerados = 0;
 }
 
-AStar::~AStar(){
+Aestrella::~Aestrella(){
     //no liberamos 'inicial': no somos dueños
 }
 
-int AStar::tiempoMs(){
+int Aestrella::tiempoMs(){
     return this->ultimoTiempo;
 }
 
 //el algoritmo A* en si
-Camino* AStar::resolver(){
+Camino* Aestrella::resolver(){
     //iniciar el cronometro
     clock_t inicioTiempo = clock();//guardar el tiempo en el que inició
 
@@ -148,7 +148,7 @@ Camino* AStar::resolver(){
 //Reconstruye el camino solucion siguiendo padres desde 'solucion' hasta el inicial
 //Los movimientos se van guardando en orden inverso, y al final se dan vuelta
 //para que queden del primero al ultimo
-Camino* AStar::reconstruirCamino(Tablero* solucion){
+Camino* Aestrella::reconstruirCamino(Tablero* solucion){
     //contar cuantos movimientos hay en la cadena
     int n = 0;
     Tablero* tablero = solucion;
