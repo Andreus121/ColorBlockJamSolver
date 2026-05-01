@@ -1,0 +1,22 @@
+[META]
+NAME = GATE_SYNC
+WIDTH = 10
+HEIGHT = 6
+STEP_LIMIT = 50
+
+[BLOCK]
+1 COLOR=c WIDTH=2 HEIGHT=2 INIT_X=1 INIT_Y=2 GEOMETRY=1 1 1 1
+
+[WALL]
+##########
+#   #    #
+#        #
+#        #
+#        #
+##########
+
+[EXIT]
+COLOR=c X=9 Y=2 ORIENTATION=V LI=2 LF=2 STEP=0
+
+[GATE]
+X=4 Y=2 ORIENTATION=V LI=3 CI=b CF=c STEP=2

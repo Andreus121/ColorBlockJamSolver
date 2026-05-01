@@ -166,6 +166,8 @@ bool Parser::cargar(const char* ruta){
     if(countCompuertas > 0){
         sd->xCompuertas = new int[countCompuertas];
         sd->yCompuertas = new int[countCompuertas];
+        sd->largoCompuertas = new int[countCompuertas];
+        sd->orientacionCompuertas = new char[countCompuertas];
         sd->colorICompuertas = new char[countCompuertas];
         sd->colorFCompuertas = new char[countCompuertas];
         sd->pasosCompuertas = new int[countCompuertas];
@@ -294,20 +296,21 @@ bool Parser::cargar(const char* ruta){
         }
 
         if(seccion == 4){
-            //GATE: COLOR=c X=x Y=y ORIENTATION=H|V LI=li CI=ci CF=cf STEP=p
-            //(LI no aplica para compuertas en nuestro modelo, lo ignoramos)
-            //COLOR podría no estar; usamos CI/CF
             const char* v;
-            char ci = '?', cf = '?';
-            int x = 0, y = 0, step = 0;
+            char ci = '?', cf = '?', orient = 'V';
+            int x = 0, y = 0, step = 0, li = 1;
             if((v = buscarValor(linea, "X"))) x = leerInt(v);
             if((v = buscarValor(linea, "Y"))) y = leerInt(v);
+            if((v = buscarValor(linea, "ORIENTATION"))) orient = leerChar(v);
+            if((v = buscarValor(linea, "LI"))) li = leerInt(v);
             if((v = buscarValor(linea, "CI"))) ci = leerChar(v);
             if((v = buscarValor(linea, "CF"))) cf = leerChar(v);
             if((v = buscarValor(linea, "STEP"))) step = leerInt(v);
-
+            
             sd->xCompuertas[idxCompuerta] = x;
             sd->yCompuertas[idxCompuerta] = y;
+            sd->largoCompuertas[idxCompuerta] = li;
+            sd->orientacionCompuertas[idxCompuerta] = orient;
             sd->colorICompuertas[idxCompuerta] = ci;
             sd->colorFCompuertas[idxCompuerta] = cf;
             sd->pasosCompuertas[idxCompuerta] = step;

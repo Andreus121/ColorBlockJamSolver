@@ -112,10 +112,20 @@ void Tablero::reconstruirCuadricula(){
     }
 
     //pintar compuertas con su color actual
+    //pintar compuertas con su color actual, considerando largo y orientacion
     for(int c = 0; c < this->staticData->cantidadCompuertas; c++){
-        int xc = this->staticData->xCompuertas[c];
-        int yc = this->staticData->yCompuertas[c];
-        this->cuadricula[yc][xc] = this->compuertas[c]->coloractual;
+        int x0 = this->staticData->xCompuertas[c];
+        int y0 = this->staticData->yCompuertas[c];
+        int largo = this->staticData->largoCompuertas[c];
+        char orient = this->staticData->orientacionCompuertas[c];
+        char color = this->compuertas[c]->coloractual;
+
+        for(int k = 0; k < largo; k++){
+            int fila, col;
+            if(orient == 'H'){ fila = y0; col = x0 + k; }
+            else { fila = y0 + k; col = x0; }
+            this->cuadricula[fila][col] = color;
+        }
     }
 
     //pintar bloques según su geometría
@@ -390,12 +400,9 @@ bool Tablero::intentarSalida(uint8_t idBloque){
 }
 
 bool Tablero::intentarCompuerta(uint8_t idBloque){
-    //obtener el indice del bloque en el arreglo
     int idx = buscarBloque(idBloque);
-    //si el bloque no existe, no puede cruzar compuerta
     if(idx == -1) return false;
 
-    //guardar los datos del bloque
     Bloque* bloque = this->bloques[idx];
     int id = bloque->id;
     int anchoB = this->staticData->anchoBloques[id];
@@ -403,84 +410,74 @@ bool Tablero::intentarCompuerta(uint8_t idBloque){
     char colorB = this->staticData->coloresBloques[id];
     uint8_t* geom = this->staticData->geometriaBloques[id];
 
-    //guardar datos del tablero
     int alto = this->staticData->altoTablero;
     int ancho = this->staticData->anchoTablero;
 
-    //comprobar cada compuerta
     for(int c = 0; c < this->staticData->cantidadCompuertas; c++){
-        //color de la compuerta debe coincidir con el bloque
-        if(this->compuertas[c]->coloractual != colorB){ 
-            continue;
-        }
-        //guardar coordenadas de la compuerta
+        if(this->compuertas[c]->coloractual != colorB) continue;
+
         int xc = this->staticData->xCompuertas[c];
         int yc = this->staticData->yCompuertas[c];
+        int largo = this->staticData->largoCompuertas[c];
+        char orient = this->staticData->orientacionCompuertas[c];
 
-        //chequear si el bloque está adyacente a la compuerta
-        //y calcular el desplazamiento del teletransporte
         int dx = 0, dy = 0;
         bool adyacente = false;
 
-        //compuerta a la derecha del bloque
-        if(bloque->x + anchoB == xc && bloque->y <= yc && yc < bloque->y + altoB){
-            dx = anchoB + 1; adyacente = true;
-        }
-        //compuerta a la izquierda
-        else if(bloque->x - 1 == xc && bloque->y <= yc && yc < bloque->y + altoB){
-            dx = -(anchoB + 1); adyacente = true;
-        }
-        //compuerta abajo
-        else if(bloque->y + altoB == yc && bloque->x <= xc && xc < bloque->x + anchoB){
-            dy = altoB + 1; adyacente = true;
-        }
-        //compuerta arriba
-        else if(bloque->y - 1 == yc && bloque->x <= xc && xc < bloque->x + anchoB){
-            dy = -(altoB + 1); adyacente = true;
-        }
-
-        //si no está adyacente, seguir con la siguiente compuerta
-        if(!adyacente){ 
-            continue;
-        }
-
-        //chequear que en la nueva posición haya espacio para el bloque completo
-        int nuevoX = bloque->x + dx;
-        int nuevoY = bloque->y + dy;
-
-        //verificar si hay espacio del otro lado de la compuerta
-        bool hayEspacio = true;
-        for(int i = 0; i < altoB && hayEspacio; i++){
-            for(int j = 0; j < anchoB && hayEspacio; j++){
-                //si la geometria del bloque no usa ese espacio, pasa de largo
-                if(geom[i * anchoB + j] != 1){ 
-                    continue;
-                }
-                //calcular la fila y columna de la nueva coordenada
-                int fila = nuevoY + i;
-                int col = nuevoX + j;
-                //comprobar que la celda esté dentro del tablero
-                if(fila < 0 || fila >= alto || col < 0 || col >= ancho){
-                    hayEspacio = false; break;
-                }
-                //comprobar que la celda esté vacía
-                if(this->cuadricula[fila][col] != ' '){
-                    hayEspacio = false;
-                }
+        if(orient == 'V'){
+            //compuerta vertical: ocupa filas yc..yc+largo-1 en columna xc
+            //bloque adyacente por la derecha (sale a la izquierda de la compuerta)
+            if(bloque->x + anchoB == xc
+               && bloque->y >= yc && bloque->y + altoB <= yc + largo
+               && altoB <= largo){
+                dx = anchoB + 1; adyacente = true;
+            }
+            //bloque adyacente por la izquierda
+            else if(bloque->x - 1 == xc
+                    && bloque->y >= yc && bloque->y + altoB <= yc + largo
+                    && altoB <= largo){
+                dx = -(anchoB + 1); adyacente = true;
+            }
+        } else {
+            //compuerta horizontal: ocupa columnas xc..xc+largo-1 en fila yc
+            //bloque adyacente por abajo
+            if(bloque->y + altoB == yc
+               && bloque->x >= xc && bloque->x + anchoB <= xc + largo
+               && anchoB <= largo){
+                dy = altoB + 1; adyacente = true;
+            }
+            //bloque adyacente por arriba
+            else if(bloque->y - 1 == yc
+                    && bloque->x >= xc && bloque->x + anchoB <= xc + largo
+                    && anchoB <= largo){
+                dy = -(altoB + 1); adyacente = true;
             }
         }
 
-        //si hay espacio, pasa de largo
-        if(!hayEspacio){
-        continue;
-        }
+        if(!adyacente) continue;
 
-        //aplicar teletransporte
+        int nuevoX = bloque->x + dx;
+        int nuevoY = bloque->y + dy;
+
+        bool hayEspacio = true;
+        for(int i = 0; i < altoB && hayEspacio; i++){
+            for(int j = 0; j < anchoB && hayEspacio; j++){
+                if(geom[i * anchoB + j] != 1) continue;
+                int fila = nuevoY + i;
+                int col = nuevoX + j;
+                if(fila < 0 || fila >= alto || col < 0 || col >= ancho){
+                    hayEspacio = false; break;
+                }
+                if(this->cuadricula[fila][col] != ' ') hayEspacio = false;
+            }
+        }
+        if(!hayEspacio) continue;
+
         bloque->x = nuevoX;
         bloque->y = nuevoY;
-        return true;//si pudo pasar el bloque
+        return true;
     }
-    return false;//no pudo pasar el bloque
+    return false;
 }
 
 bool Tablero::moverBloque(uint8_t idBloque, char direccion){

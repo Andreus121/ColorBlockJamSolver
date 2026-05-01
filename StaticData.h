@@ -33,6 +33,8 @@ class StaticData{
     int cantidadCompuertas;
     int* xCompuertas;
     int* yCompuertas;
+    int* largoCompuertas;
+    char* orientacionCompuertas;
     char* colorICompuertas;
     char* colorFCompuertas;
     int* pasosCompuertas;

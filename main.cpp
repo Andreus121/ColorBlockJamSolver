@@ -33,11 +33,19 @@ void liberarStaticData(StaticData* sd){
         for(int i = 0; i < sd->cantidadBloques; i++) delete[] sd->geometriaBloques[i];
         delete[] sd->geometriaBloques;
     }
-    delete[] sd->xSalidas; delete[] sd->ySalidas; delete[] sd->coloresSalidas;
-    delete[] sd->orientacionSalidas; delete[] sd->largoISalidas;
-    delete[] sd->largoFSalidas; delete[] sd->pasosSalidas;
-    delete[] sd->xCompuertas; delete[] sd->yCompuertas;
-    delete[] sd->colorICompuertas; delete[] sd->colorFCompuertas;
+    delete[] sd->xSalidas; 
+    delete[] sd->ySalidas; 
+    delete[] sd->coloresSalidas;
+    delete[] sd->orientacionSalidas; 
+    delete[] sd->largoISalidas;
+    delete[] sd->largoFSalidas; 
+    delete[] sd->pasosSalidas;
+    delete[] sd->xCompuertas; 
+    delete[] sd->yCompuertas;
+    delete[] sd->largoCompuertas;
+    delete[] sd->orientacionCompuertas;
+    delete[] sd->colorICompuertas; 
+    delete[] sd->colorFCompuertas;
     delete[] sd->pasosCompuertas;
     delete sd;
 }
@@ -161,10 +169,13 @@ int main(){
                 Camino* sol = astar->resolver();
                 ultimoTiempoMs = astar->tiempoMs();
                 int explorados = astar->estadosExplorados;
+                int generados = astar->estadosGenerados;
                 delete astar;
 
                 if(sol == nullptr){
                     std::cout << "Tiempo resolucion: " << ultimoTiempoMs << " [mseg]" << std::endl;
+                    std::cout << "Estados explorados: " << explorados << std::endl;
+                    std::cout << "Estados generados: " << generados << std::endl;
                     std::cout << "No tiene solucion" << std::endl;
                     break;
                 }
@@ -193,6 +204,7 @@ int main(){
                 std::cout << "\nResumen" << std::endl;
                 std::cout << "Tiempo resolucion: " << ultimoTiempoMs << " [mseg]" << std::endl;
                 std::cout << "Estados explorados: " << explorados << std::endl;
+                std::cout << "Estados generados: " << generados << std::endl;
                 std::cout << "Solucion encontrada, pasos:" << std::endl;
                 sol->imprimir();
                 break;

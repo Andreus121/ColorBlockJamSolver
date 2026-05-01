@@ -27,6 +27,8 @@ StaticData::StaticData(){
     this->cantidadCompuertas = 0;
     this->xCompuertas = nullptr;
     this->yCompuertas = nullptr;
+    this->largoCompuertas = nullptr;
+    this->orientacionCompuertas = nullptr;
     this->colorICompuertas = nullptr;
     this->colorFCompuertas = nullptr;
     this->pasosCompuertas = nullptr;

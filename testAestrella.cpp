@@ -43,7 +43,7 @@ void probar(const char* ruta){
     std::cout << "Estado inicial:" << std::endl;
     inicial->imprimir();
 
-    AStar* astar = new AStar(inicial);
+    Aestrella* astar = new Aestrella(inicial);
     Camino* sol = astar->resolver();
 
     std::cout << "\nEstados explorados: " << astar->estadosExplorados << std::endl;
@@ -69,7 +69,7 @@ int main(int argc, char** argv){
     if(argc >= 2){
         probar(argv[1]);
     } else {
-        //probar("Ejemplo1.txt");
+        probar("compuerta1.txt");
         //probar("facil2.txt");
         //probar("Ejemplo3.txt");
         //probar("Ejemplo4.txt");
